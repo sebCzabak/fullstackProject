@@ -11,7 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -29,12 +28,16 @@ public class WebSecurityConfig
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity)throws Exception{
         httpSecurity
                 .csrf().disable()
-                .authorizeHttpRequests((auth)->auth
-                        .anyRequest().authenticated()
-                        )
-                .httpBasic(withDefaults());
+                .authorizeHttpRequests()
+                        .requestMatchers("/**")
+                    .permitAll()
+
+                .and().formLogin();
+
+               // .httpBasic(withDefaults());
                 return httpSecurity.build();
     }
+
     protected void configure(AuthenticationManager authenticationManager)throws Exception{
         authenticationManager.authenticate((Authentication) daoAuthenticationProvider());
     }
