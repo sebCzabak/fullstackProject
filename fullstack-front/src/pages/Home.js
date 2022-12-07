@@ -1,46 +1,15 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 
 export default function Home() {
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    console.log("ELO");
-  });
-
   return (
-    <div className="container">
-      <div className="py-4">
-        <table className="table border shadow">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
-              <th scope="col">Handle</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td colSpan="2">Larry the Bird</td>
-              <td>@twitter</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div>
+      « Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod
+      tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+      quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut
+      aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in
+      voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+      sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt
+      mollit anim id est laborum. »
     </div>
   );
 }

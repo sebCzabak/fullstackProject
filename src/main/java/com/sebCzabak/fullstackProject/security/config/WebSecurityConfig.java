@@ -1,5 +1,6 @@
 package com.sebCzabak.fullstackProject.security.config;
 
+
 import com.sebCzabak.fullstackProject.service.AppUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.sql.DataSource;
 
 
 @Configuration
@@ -29,12 +32,16 @@ public class WebSecurityConfig
         httpSecurity
                 .csrf().disable()
                 .authorizeHttpRequests()
-                        .requestMatchers("/**")
-                    .permitAll()
-
-                .and().formLogin();
-
-               // .httpBasic(withDefaults());
+                .requestMatchers("/api/**")
+                .permitAll()
+                .requestMatchers("/api/home")
+                .permitAll()
+                .requestMatchers("/api/AdminPage")
+                .hasAuthority("ADMIN")
+                .anyRequest()
+                .authenticated()
+                .and()
+                .httpBasic();
                 return httpSecurity.build();
     }
 
@@ -50,4 +57,8 @@ public class WebSecurityConfig
         provider.setUserDetailsService(appUserService);
         return provider;
     }
+
+
+
+
 }

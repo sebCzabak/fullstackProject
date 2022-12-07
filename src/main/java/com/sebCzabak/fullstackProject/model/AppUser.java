@@ -1,6 +1,7 @@
 package com.sebCzabak.fullstackProject.model;
 
 import jakarta.persistence.*;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,13 +25,14 @@ public class AppUser implements UserDetails {
     )
     private Long id;
     private String firstName;
-    private String lastName;
+    private String UserName;
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
     private Boolean locked =false;
-    private Boolean enabled;
+    private Boolean enabled = false;
+
 
     public Long getId() {
         return id;
@@ -48,11 +50,11 @@ public class AppUser implements UserDetails {
         this.firstName = firstName;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getUserName() {
+        return UserName;
     }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setUserName(String UserName) {
+        this.UserName = UserName;
     }
 
     public String getEmail() {
@@ -96,15 +98,15 @@ public class AppUser implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AppUser appUser = (AppUser) o;
-        return Objects.equals(id, appUser.id) && Objects.equals(firstName, appUser.firstName) && Objects.equals(lastName, appUser.lastName) && Objects.equals(email, appUser.email) && Objects.equals(password, appUser.password) && appUserRole == appUser.appUserRole && Objects.equals(locked, appUser.locked) && Objects.equals(enabled, appUser.enabled);
+        return Objects.equals(id, appUser.id) && Objects.equals(firstName, appUser.firstName) && Objects.equals(UserName, appUser.UserName) && Objects.equals(email, appUser.email) && Objects.equals(password, appUser.password) && appUserRole == appUser.appUserRole && Objects.equals(locked, appUser.locked) && Objects.equals(enabled, appUser.enabled);
     }
 
     public AppUser() {
     }
 
-    public AppUser(String firstName, String lastName, String email, String password, AppUserRole appUserRole) {
+    public AppUser(String firstName, String UserName, String email, String password, AppUserRole appUserRole) {
         this.firstName = firstName;
-        this.lastName = lastName;
+        this.UserName = UserName;
         this.email = email;
         this.password = password;
         this.appUserRole = appUserRole;
@@ -112,13 +114,12 @@ public class AppUser implements UserDetails {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, email, password, appUserRole, locked, enabled);
+        return Objects.hash(id, firstName, UserName, email, password, appUserRole, locked, enabled);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(appUserRole.name());
-        return Collections.singleton(authority);
+        return Collections.singleton(new SimpleGrantedAuthority(appUserRole.name()));
     }
 
     @Override
