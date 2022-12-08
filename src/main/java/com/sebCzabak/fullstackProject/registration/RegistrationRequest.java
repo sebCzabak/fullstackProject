@@ -1,5 +1,8 @@
 package com.sebCzabak.fullstackProject.registration;
 
+import jakarta.persistence.Entity;
+import org.springframework.stereotype.Component;
+
 import java.util.Objects;
 
 public class RegistrationRequest {

@@ -1,5 +1,5 @@
 package com.sebCzabak.fullstackProject.model;
 
-public enum AppUserRole {
+public enum EmployeeRole {
     USER,ADMIN
 }

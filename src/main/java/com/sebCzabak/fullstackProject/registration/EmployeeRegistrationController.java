@@ -1,7 +1,7 @@
 package com.sebCzabak.fullstackProject.registration;
 
 
-import com.sebCzabak.fullstackProject.model.AppUser;
+import com.sebCzabak.fullstackProject.model.Employee;
 import com.sebCzabak.fullstackProject.repo.EmployeeRepository;
 import com.sebCzabak.fullstackProject.service.RegistrationService;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ public class EmployeeRegistrationController {
 
     @GetMapping("/home")
     public String home(){
-        return "This is a Home page";
+        return "index.html";
     }
     @GetMapping("/AdminPage")
     public String admin(){
@@ -31,7 +31,7 @@ public class EmployeeRegistrationController {
 
 
     @GetMapping("/users")
-    List<AppUser> getAllEmployees(){
+    List<Employee> getAllEmployees(){
         return registrationService.findAll();
     }
 
@@ -41,28 +41,29 @@ public class EmployeeRegistrationController {
         return registrationService.register(request);
     }
 
+//    @GetMapping("/confirm")
+//    public String confirm(@RequestParam("token")String token){
+//        return registrationService.confirmToken(token);
+//    }
     @GetMapping("/user/{id}")
-    AppUser getEmployeeById(@PathVariable Long id){
+    Employee getEmployeeById(@PathVariable Long id){
         return registrationService.findById(id);
     }
     @PutMapping("/upUser/{id}")
    public void updateEmployee(
            @PathVariable Long id,
            @RequestParam(required = false)String firstName,
-           @RequestParam(required = false)String lastName,
+           @RequestParam(required = false)String userName,
            @RequestParam(required = false)String email,
            @RequestParam(required = false)String password)
     {
-        registrationService.updateEmployee(id,firstName,lastName,email,password);
+        registrationService.updateEmployee(id,firstName,userName,email,password);
     }
 
     @DeleteMapping("/delUser/{id}")
     public void deleteEmployee(@PathVariable Long id){
         registrationService.deleteEmployee(id);
     }
-//    @PostMapping("/login/{email,password}")
-//    public String loginEmployee(@RequestBody LoginRequest loginRequest){
-//        return registrationService.login()
-//    }
+
 
 }

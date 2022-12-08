@@ -1,12 +1,13 @@
 package com.sebCzabak.fullstackProject.service;
 
 import com.sebCzabak.fullstackProject.exception.UserNotFoundException;
-import com.sebCzabak.fullstackProject.model.AppUser;
-import com.sebCzabak.fullstackProject.model.AppUserRole;
+import com.sebCzabak.fullstackProject.model.Employee;
+import com.sebCzabak.fullstackProject.model.EmployeeRole;
 import com.sebCzabak.fullstackProject.registration.EmailValidator;
 import com.sebCzabak.fullstackProject.registration.RegistrationRequest;
+import com.sebCzabak.fullstackProject.registration.token.ConfirmationTokenService;
 import com.sebCzabak.fullstackProject.repo.EmployeeRepository;
-import com.sebCzabak.fullstackProject.service.AppUserService;
+import com.sebCzabak.fullstackProject.model.EmployeeService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -16,37 +17,39 @@ import java.util.Objects;
 
 @Service
 public class RegistrationService {
-    public RegistrationService(EmailValidator emailValidator, AppUserService appUserService, EmployeeRepository employeeRepository) {
+    public RegistrationService(EmailValidator emailValidator, EmployeeService employeeService, EmployeeRepository employeeRepository, ConfirmationTokenService confirmationTokenService) {
         this.emailValidator = emailValidator;
-        this.appUserService = appUserService;
+        this.employeeService = employeeService;
         this.employeeRepository = employeeRepository;
+        this.confirmationTokenService = confirmationTokenService;
     }
 
     private EmailValidator emailValidator;
-    private final AppUserService appUserService;
+    private final EmployeeService employeeService;
     private final EmployeeRepository employeeRepository;
+    private final ConfirmationTokenService confirmationTokenService;
     public String register(RegistrationRequest request) {
        boolean isValidEmail = emailValidator.test(request.getEmail());
        if(!isValidEmail){
            throw new IllegalStateException("email not valid");
        }
-        return appUserService.singUpUser(
-                new AppUser(
+        return employeeService.singUpUser(
+                new Employee(
                         request.getFirstName(),
                         request.getUserName(),
                         request.getEmail(),
                         request.getPassword(),
-                        AppUserRole.USER
+                        EmployeeRole.USER
 
                 )
         );
     }
 
-    public List<AppUser> findAll() {
+    public List<Employee> findAll() {
         return employeeRepository.findAll();
     }
 
-    public AppUser findById(Long id) {
+    public Employee findById(Long id) {
         return employeeRepository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException(id));
 
@@ -54,7 +57,7 @@ public class RegistrationService {
 
     @Transactional
     public void updateEmployee(Long id, String firstName, String UserName, String email, String password) {
-        AppUser employee = employeeRepository.findById(id)
+        Employee employee = employeeRepository.findById(id)
                 .orElseThrow(()->new UserNotFoundException(id));
 
         if(firstName !=null && firstName.length() > 0 &&!Objects.equals(employee.getFirstName(),firstName)){
@@ -71,13 +74,12 @@ public class RegistrationService {
         }
     }
     public void deleteEmployee(Long id) {
-        boolean exists=employeeRepository.existsById(id);
+        boolean exists = employeeRepository.existsById(id);
                 if(!exists){
                     throw new UserNotFoundException(id);
                 }
                 employeeRepository.deleteById(id);
     }
-
 
 
 

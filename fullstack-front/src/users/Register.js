@@ -82,7 +82,11 @@ export default function Register(props) {
               />
             </div>
 
-            <button type="submit" className="btn btn-outline-primary">
+            <button
+              type="submit"
+              className="btn btn-outline-primary "
+              to="/Home"
+            >
               Submit
             </button>
             <Link

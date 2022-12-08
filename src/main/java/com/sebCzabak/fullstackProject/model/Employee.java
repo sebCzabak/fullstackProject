@@ -1,5 +1,6 @@
 package com.sebCzabak.fullstackProject.model;
 
+import com.sebCzabak.fullstackProject.model.tasks.Task;
 import jakarta.persistence.*;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -11,7 +12,7 @@ import java.util.Collections;
 import java.util.Objects;
 
 @Entity
-public class AppUser implements UserDetails {
+public class Employee implements UserDetails {
     @Id
     @SequenceGenerator(
             name="employee_sequence",
@@ -29,9 +30,12 @@ public class AppUser implements UserDetails {
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
-    private AppUserRole appUserRole;
+    private EmployeeRole employeeRole;
     private Boolean locked =false;
     private Boolean enabled = false;
+    @ManyToOne
+    @JoinColumn(name = "task_id")
+    private Task task;
 
 
     public Long getId() {
@@ -69,12 +73,12 @@ public class AppUser implements UserDetails {
         this.password = password;
     }
 
-    public AppUserRole getAppUserRole() {
-        return appUserRole;
+    public EmployeeRole getAppUserRole() {
+        return employeeRole;
     }
 
-    public void setAppUserRole(AppUserRole appUserRole) {
-        this.appUserRole = appUserRole;
+    public void setAppUserRole(EmployeeRole employeeRole) {
+        this.employeeRole = employeeRole;
     }
 
     public Boolean getLocked() {
@@ -97,29 +101,29 @@ public class AppUser implements UserDetails {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AppUser appUser = (AppUser) o;
-        return Objects.equals(id, appUser.id) && Objects.equals(firstName, appUser.firstName) && Objects.equals(UserName, appUser.UserName) && Objects.equals(email, appUser.email) && Objects.equals(password, appUser.password) && appUserRole == appUser.appUserRole && Objects.equals(locked, appUser.locked) && Objects.equals(enabled, appUser.enabled);
+        Employee employee = (Employee) o;
+        return Objects.equals(id, employee.id) && Objects.equals(firstName, employee.firstName) && Objects.equals(UserName, employee.UserName) && Objects.equals(email, employee.email) && Objects.equals(password, employee.password) && employeeRole == employee.employeeRole && Objects.equals(locked, employee.locked) && Objects.equals(enabled, employee.enabled);
     }
 
-    public AppUser() {
+    public Employee() {
     }
 
-    public AppUser(String firstName, String UserName, String email, String password, AppUserRole appUserRole) {
+    public Employee(String firstName, String UserName, String email, String password, EmployeeRole employeeRole) {
         this.firstName = firstName;
         this.UserName = UserName;
         this.email = email;
         this.password = password;
-        this.appUserRole = appUserRole;
+        this.employeeRole = employeeRole;
            }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, UserName, email, password, appUserRole, locked, enabled);
+        return Objects.hash(id, firstName, UserName, email, password, employeeRole, locked, enabled);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(appUserRole.name()));
+        return Collections.singleton(new SimpleGrantedAuthority(employeeRole.name()));
     }
 
     @Override

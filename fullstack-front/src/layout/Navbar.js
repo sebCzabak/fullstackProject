@@ -6,12 +6,16 @@ export default function Navbar() {
     <div>
       <nav className="navbar navbar-dark bg-dark">
         <div className="container-fluid">
-          <a className="navbar-brand" href="/Login">
+          <a className="navbar-brand" href="/Home">
             Fullstack app
           </a>
 
           <Link className="btn btn-outline-light" to="/register">
             Register User
+          </Link>
+
+          <Link className="btn btn-outline-light" to="/Todo">
+            Todo
           </Link>
         </div>
       </nav>

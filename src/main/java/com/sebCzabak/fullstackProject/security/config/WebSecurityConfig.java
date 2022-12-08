@@ -1,7 +1,7 @@
 package com.sebCzabak.fullstackProject.security.config;
 
 
-import com.sebCzabak.fullstackProject.service.AppUserService;
+import com.sebCzabak.fullstackProject.model.EmployeeService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,18 +12,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import javax.sql.DataSource;
-
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig
 {
-    private final AppUserService appUserService;
+    private final EmployeeService employeeService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public WebSecurityConfig(AppUserService appUserService, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.appUserService = appUserService;
+    public WebSecurityConfig(EmployeeService employeeService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.employeeService = employeeService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -34,14 +32,16 @@ public class WebSecurityConfig
                 .authorizeHttpRequests()
                 .requestMatchers("/api/**")
                 .permitAll()
-                .requestMatchers("/api/home")
+                .requestMatchers("/api/TaskController/**")
                 .permitAll()
-                .requestMatchers("/api/AdminPage")
+                 .requestMatchers("/api/AdminPage")
                 .hasAuthority("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()
                 .httpBasic();
+
+
                 return httpSecurity.build();
     }
 
@@ -54,7 +54,7 @@ public class WebSecurityConfig
         DaoAuthenticationProvider provider =
                 new DaoAuthenticationProvider();
         provider.setPasswordEncoder(bCryptPasswordEncoder);
-        provider.setUserDetailsService(appUserService);
+        provider.setUserDetailsService(employeeService);
         return provider;
     }
 

@@ -9,9 +9,8 @@ export default function Login() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(email);
     await axios.post("http://localhost:8080/api/login/${email,password}");
-    navigate("/Home/${id}");
+    navigate("/Home");
   };
   return (
     <div className="container">
